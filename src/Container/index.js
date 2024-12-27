@@ -1,6 +1,6 @@
-const { DocumentAnalysisClient, AzureKeyCredential } = require("@azure/ai-form-recognizer");
-const fs = require("fs");
-const queryGPT = require("./chat_sdk.js");
+import { DocumentAnalysisClient, AzureKeyCredential } from "@azure/ai-form-recognizer";
+import fs from 'fs';
+import queryGPT from './chat_sdk';
 
 const endpoint = "https://billy-doc-poc.cognitiveservices.azure.com/";
 const apiKey = "<DOC_KEY>";
@@ -28,11 +28,11 @@ async function analyzePDF() {
 }
 
 analyzePDF()
-    .then((data) => {
-        const content = data.content;
-        const question = "服務提供方需要保證服務的可用性為多少？"
-        queryGPT(content, question);
-    })
-    .catch((err) => {
-        console.error("Error:", err.message);
-    });
+  .then((data) => {
+    const content = data.content;
+    const question = "服務提供方需要保證服務的可用性為多少？"
+    queryGPT(content, question);
+  })
+  .catch((err) => {
+    console.error("Error:", err.message);
+  });

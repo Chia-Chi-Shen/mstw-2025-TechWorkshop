@@ -1,0 +1,34 @@
+.key-container {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.key-label {
+    color: grey;
+}
+
+.key-input {
+    width: 100px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+.key-button {
+    padding: 4px;
+    background-color: grey;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.key-button:hover {
+    background-color: rgb(84, 84, 84);
+}
