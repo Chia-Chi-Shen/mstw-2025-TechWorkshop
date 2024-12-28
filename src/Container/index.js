@@ -27,6 +27,25 @@ async function analyzePDF() {
   return result;
 }
 
+async function analyzePDFWithUrl(){
+  const client = new DocumentAnalysisClient(endpoint, new AzureKeyCredential(apiKey));
+
+  const blobUrl = "https://workshoppoc.blob.core.windows.net/pdf/test.pdf";
+
+  console.log("Starting analysis from Blob Storage URL...");
+  const poller = await client.beginAnalyzeDocumentFromUrl("prebuilt-document", blobUrl);
+
+  const result = await poller.pollUntilDone();
+
+  if (!result) {
+    console.log("You fucked up :(");
+    throw new Error("You fucked up :(");
+  }
+
+  console.log(result);
+  return result;
+}
+
 analyzePDF()
   .then((data) => {
     const content = data.content;
