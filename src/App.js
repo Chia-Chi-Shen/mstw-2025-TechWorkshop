@@ -60,7 +60,7 @@ function App() {
     // Start the analysis process.
     try {
       // First, analyze the PDF file.
-      const data = await analyzePDF()
+      const data = await analyzePDFWithUrl()
       const content = data.content;
       // Then, query the GPT model.
       const result = await queryGPT(content, question);
@@ -71,40 +71,28 @@ function App() {
   }
 
   // Implement the analyzePDF function here
-  const analyzePDF = async () => {
+  async function analyzePDFWithUrl() {
+    const client = new DocumentAnalysisClient(endpoint, new AzureKeyCredential(apiKey));
 
-    const result = {
-      content: "This is a sample contract. It contains information about the terms and conditions of the agreement between the parties. The contract is legally binding and enforceable in a court of law. The contract is written in English and is in PDF format. The contract is signed by the parties and contains their names and signatures. The contract contains provisions relating to the payment of money, the delivery of goods, and the performance of services. The contract also contains provisions relating to the termination of the agreement and the resolution of disputes between the parties. The contract is dated and contains the date of the agreement. The contract is valid and enforceable in accordance with the laws of the jurisdiction in which it was signed."
+    const blobUrl = "https://workshoppoc.blob.core.windows.net/pdf/test.pdf";
+
+    console.log("Starting analysis from Blob Storage URL...");
+    const poller = await client.beginAnalyzeDocumentFromUrl("prebuilt-document", blobUrl);
+
+    const result = await poller.pollUntilDone();
+
+    if (!result) {
+      console.log("You fucked up :(");
+      throw new Error("You fucked up :(");
     }
-    // const client = new DocumentAnalysisClient(endpoint, new AzureKeyCredential(docKey));
 
-    // const pdfUrl = "https://storage.googleapis.com/[BUCKET_NAME]/[FILE_NAME].pdf"; // 你的雲端檔案連結
-    // const response = await fetch(pdfUrl);
-
-    // if (!response.ok) {
-    //   throw new Error("Failed to fetch the PDF file");
-    // }
-
-    // // 將 PDF 轉換為 Blob
-    // const pdfBlob = await response.blob();
-
-    // console.log("Uploading PDF and starting analysis...");
-    // const poller = await client.beginAnalyzeDocument("prebuilt-document", pdfBlob, {
-    //   contentType: "application/pdf",
-    // });
-    // const result = await poller.pollUntilDone();
-
-    // if (!result) {
-    //   console.log("Something went wrong :(");
-    //   throw new Error("Analysis failed.");
-    // }
-
-    // console.log(result);
+    console.log(result);
     return result;
   }
 
   // Implement the queryGPT function here
   const queryGPT = async (contract, question) => {
+    question = "服務提供方需要保證服務的可用性為多少？"
     console.log('API Key:', apiKey);
     const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment, dangerouslyAllowBrowser: true });
 
@@ -132,7 +120,7 @@ function App() {
       temperature: 0.5
     });
 
-    setMessages([...messages, { text: result.choices[0].message.content, side: 'right' }]);
+    setMessages([...messages, { text: result.choices[0].message.content, side: 'left' }]);
 
     // Scroll to the end of the messages.
     messageEndRef.current.scrollIntoView({ behavior: "smooth" });
