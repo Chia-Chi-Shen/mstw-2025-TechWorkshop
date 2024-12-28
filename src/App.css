@@ -25,6 +25,51 @@ h1 {
   justify-content: flex-start;
 }
 
+/* PdfList */
+.key-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.key-row {
+  width: 100%;
+  padding: 3px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.key-label {
+  color: grey;
+  width: 90px;
+}
+
+.key-input {
+  width: 100px;
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex-grow: 1;
+}
+
+.key-button {
+  padding: 4px;
+  background-color: grey;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.key-button:hover {
+  background-color: rgb(84, 84, 84);
+}
+
 .pdf-list {
   list-style: none;
   padding: 0;
@@ -38,6 +83,43 @@ h1 {
 
 .pdf-list input {
   margin-right: 10px;
+}
+
+/* Chatroom */
+.chatroom-container {
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.message-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message {
+  padding: 5px 10px;
+  border-radius: 4px;
+  width: fit-content;
+  max-width: 90%;
+}
+
+.message-left {
+  margin-left: 20px;
+  background-color: #8acce3;
+}
+
+.message-right {
+  margin-left: auto;
+  margin-right: 20px;
+  background-color: #ffffff;
 }
 
 .chat-box {
@@ -54,6 +136,8 @@ h1 {
   border-radius: 4px;
   margin-bottom: 20px;
   resize: none;
+  padding: 10px;
+  font: inherit;
 }
 
 .chat-box button {
