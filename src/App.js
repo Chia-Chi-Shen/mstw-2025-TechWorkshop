@@ -4,11 +4,9 @@ import { AzureOpenAI } from 'openai';
 import './App.css';
 
 const pdfList = [
-  { title: 'PDF 1', url: '/sample.pdf' },
-  { title: 'PDF 2', url: '/sample.pdf' },
-  { title: 'PDF 3', url: '/sample.pdf' },
-  { title: 'PDF 4', url: '/sample.pdf' },
-  { title: 'PDF 5', url: '/sample.pdf' },
+  { title: 'demo1.pdf', url: 'https://workshoppoc.blob.core.windows.net/pdf/demo1.pdf' },
+  { title: 'demo2.pdf', url: 'https://workshoppoc.blob.core.windows.net/pdf/demo2.pdf' },
+  { title: 'demo3.pdf', url: 'https://workshoppoc.blob.core.windows.net/pdf/demo3.pdf' },
 ];
 
 const endpoint = "https://ai-allen7845123692269ai150842469449.openai.azure.com";
@@ -145,7 +143,7 @@ function App() {
         <ul className="pdf-list">
           {pdfList.map((pdf, index) => (
             <li key={index}><input type="radio" value="pdf2" />
-              <a href="sample.pdf" target="_blank">{pdf.title}</a>
+              <a href={pdf.url} target="_blank">{pdf.title}</a>
             </li>
           ))}
         </ul>
