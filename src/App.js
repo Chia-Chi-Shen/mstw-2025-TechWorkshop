@@ -1,30 +1,7 @@
 import { useState, useRef } from 'react';
 import { DocumentAnalysisClient, AzureKeyCredential } from "@azure/ai-form-recognizer";
-import AzureOpenAI from 'openai';
+import { AzureOpenAI } from 'openai';
 import './App.css';
-
-const testMessages = [
-  { text: 'Hello', side: 'left' },
-  { text: 'Hi', side: 'right' },
-  { text: 'How are you?', side: 'left' },
-  { text: 'I am fine', side: 'right' },
-  { text: 'Good to hear', side: 'left' },
-  { text: 'Hello', side: 'left' },
-  { text: 'Hi', side: 'right' },
-  { text: 'How are you?', side: 'left' },
-  { text: 'I am fine', side: 'right' },
-  { text: 'Good to hear', side: 'left' },
-  { text: 'Hello', side: 'left' },
-  { text: 'Hi', side: 'right' },
-  { text: 'How are you?', side: 'left' },
-  { text: 'I am fine', side: 'right' },
-  { text: 'Good to hear', side: 'left' },
-  { text: 'Hello', side: 'left' },
-  { text: 'Hi', side: 'right' },
-  { text: 'How are you?', side: 'left' },
-  { text: 'I am fine', side: 'right' },
-  { text: 'Good to hear', side: 'left' },
-];
 
 const pdfList = [
   { title: 'PDF 1', url: '/sample.pdf' },
@@ -34,14 +11,15 @@ const pdfList = [
   { title: 'PDF 5', url: '/sample.pdf' },
 ];
 
-const endpoint = "https://ai-allen7845123692269ai150842469449.openai.azure.com"
+const endpoint = "https://ai-allen7845123692269ai150842469449.openai.azure.com";
 const apiVersion = "2024-08-01-preview";
 const deployment = "gpt-35-turbo-2";
 
 function App() {
-  const [messages, setMessages] = useState(testMessages);
+  const [messages, setMessages] = useState('');
   const [apiKey, setApiKey] = useState(localStorage.getItem('ApiKey') || '');
   const [docKey, setDocKey] = useState(localStorage.getItem('DocKey') || '');
+  const [isLoading, setIsLoading] = useState(false);
   const messageEndRef = useRef(null);
 
   const sendQuestion = async () => {
@@ -54,19 +32,29 @@ function App() {
       return;
     }
     // Get the question from the textarea and update the messages.
-    const question = document.querySelector('.chat-box textarea').value;
-    setMessages([...messages, { text: question, side: 'left' }]);
+    const textarea = document.querySelector('.chat-box textarea');
+    const question = textarea.value;
+    if (!question) {
+      return;
+    }
+    textarea.value = '';
+    setMessages((messages) => [...messages, { text: question, side: 'right' }]);
 
-    // Start the analysis process.
     try {
+      // Start the analysis process.
+      setIsLoading(true);
       // First, analyze the PDF file.
       const data = await analyzePDFWithUrl()
       const content = data.content;
-      // Then, query the GPT model.
+      // Then, query the GPT model and get the response.
       const result = await queryGPT(content, question);
-      console.log(result);
+      // Update states of the chatroom.
+      setIsLoading(false);
+      setMessages((messages) => [...messages, { text: result, side: 'left' }]);
+      // Scroll to the bottom of the messages.
+      messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     } catch (error) {
-      console.log(error);
+      console.error("Error:", error.message);
     }
   }
 
@@ -82,23 +70,21 @@ function App() {
     const result = await poller.pollUntilDone();
 
     if (!result) {
-      console.log("You fucked up :(");
-      throw new Error("You fucked up :(");
+      console.log("Failed to analyze the PDF file. :(");
+      throw new Error("Failed to analyze the PDF file. :(");
     }
 
-    console.log(result);
     return result;
   }
 
   // Implement the queryGPT function here
-  const queryGPT = async (contract, question) => {
-    question = "服務提供方需要保證服務的可用性為多少？"
-    console.log('API Key:', apiKey);
+  async function queryGPT(contract, question) {
+
     const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment, dangerouslyAllowBrowser: true });
 
     const system_prompt = `You are a contract analyst assistant. Your task is to help users understand the content of a provided contract. You will: \n \
                               1. Only respond based on the contract's content. \n \
-                              2. If the contract doesn't contain the information requested, reply with \"The contract does not provide information about this.\" \n \
+                              2. If the contract doesn't contain the information requested, reply with "The contract does not provide information about this." \n \
                               3. Always provide concise and clear answers based on the specific content of the contract.\n \
                               4. Assume the contract text has been fully loaded and is available to you in the context. \n \
                           `
@@ -120,10 +106,7 @@ function App() {
       temperature: 0.5
     });
 
-    setMessages([...messages, { text: result.choices[0].message.content, side: 'left' }]);
-
-    // Scroll to the end of the messages.
-    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    return result.choices[0].message.content;
   }
 
   const handleApiKey = () => {
@@ -170,11 +153,14 @@ function App() {
       <section className='container' style={{ backgroundColor: '#eeeded' }}>
         <h1>Chatroom</h1>
         <div className="chatroom-container">
-          {messages.map((message, index) => (
+          {messages.length !== 0 && messages.map((message, index) => (
             <div key={index} className="message-container">
               <div className={`message message-${message.side}`}>{message.text}</div>
             </div>
           ))}
+          {isLoading && <div className="message-container">
+            <div className="message message-left">Loading...</div>
+          </div>}
           <div ref={messageEndRef}></div>
         </div>
         <div className="chat-box">
