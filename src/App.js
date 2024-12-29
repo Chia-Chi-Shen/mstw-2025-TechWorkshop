@@ -9,9 +9,9 @@ const pdfList = [
   { title: 'demo3.pdf', url: 'https://workshoppoc.blob.core.windows.net/pdf/demo3.pdf' },
 ];
 
-const endpoint = "https://ai-allen7845123692269ai150842469449.openai.azure.com";
-const apiVersion = "2024-08-01-preview";
-const deployment = "gpt-35-turbo-2";
+const endpoint = "your_endpoint";
+const apiVersion = "your_api_version";
+const deployment = "your_deployment";
 
 function App() {
   const [messages, setMessages] = useState('');
@@ -29,6 +29,19 @@ function App() {
       window.alert('Please enter the DOC Key');
       return;
     }
+    // Get the selected PDF file.
+    const pdfList = document.querySelectorAll('.pdf-list input');
+    let blobUrl;
+    pdfList.forEach((pdf) => {
+      if (pdf.checked) {
+        blobUrl = pdf.value;
+      }
+    });
+    if (!blobUrl) {
+      alert('Please select a PDF file');
+      return;
+    };
+
     // Get the question from the textarea and update the messages.
     const textarea = document.querySelector('.chat-box textarea');
     const question = textarea.value;
@@ -42,7 +55,7 @@ function App() {
       // Start the analysis process.
       setIsLoading(true);
       // First, analyze the PDF file.
-      const data = await analyzePDFWithUrl()
+      const data = await analyzePDFWithUrl(blobUrl)
       const content = data.content;
       // Then, query the GPT model and get the response.
       const result = await queryGPT(content, question);
@@ -57,54 +70,13 @@ function App() {
   }
 
   // Implement the analyzePDF function here
-  async function analyzePDFWithUrl() {
-    const client = new DocumentAnalysisClient(endpoint, new AzureKeyCredential(apiKey));
+  async function analyzePDFWithUrl(blobUrl) {
 
-    const blobUrl = "https://workshoppoc.blob.core.windows.net/pdf/test.pdf";
-
-    console.log("Starting analysis from Blob Storage URL...");
-    const poller = await client.beginAnalyzeDocumentFromUrl("prebuilt-document", blobUrl);
-
-    const result = await poller.pollUntilDone();
-
-    if (!result) {
-      console.log("Failed to analyze the PDF file. :(");
-      throw new Error("Failed to analyze the PDF file. :(");
-    }
-
-    return result;
   }
 
   // Implement the queryGPT function here
   async function queryGPT(contract, question) {
 
-    const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment, dangerouslyAllowBrowser: true });
-
-    const system_prompt = `You are a contract analyst assistant. Your task is to help users understand the content of a provided contract. You will: \n \
-                              1. Only respond based on the contract's content. \n \
-                              2. If the contract doesn't contain the information requested, reply with "The contract does not provide information about this." \n \
-                              3. Always provide concise and clear answers based on the specific content of the contract.\n \
-                              4. Assume the contract text has been fully loaded and is available to you in the context. \n \
-                          `
-    const user_prompt = `Below is the text of a contract. Please answer the question based on this contract. \n \
-                          Contract:
-                          ---
-                          ${contract} \n \
-                          \n \
-                          --- \n \
-                          \n \
-                          Question: ${question}`
-
-    const result = await client.chat.completions.create({
-      messages: [
-        { role: "system", content: system_prompt },
-        { role: "user", content: user_prompt },
-      ],
-      max_tokens: 100,
-      temperature: 0.5
-    });
-
-    return result.choices[0].message.content;
   }
 
   const handleApiKey = () => {
@@ -142,7 +114,7 @@ function App() {
         </div>
         <ul className="pdf-list">
           {pdfList.map((pdf, index) => (
-            <li key={index}><input type="radio" value="pdf2" />
+            <li key={index}><input type="radio" value={pdf.url} name="pdf-list" />
               <a href={pdf.url} target="_blank">{pdf.title}</a>
             </li>
           ))}
