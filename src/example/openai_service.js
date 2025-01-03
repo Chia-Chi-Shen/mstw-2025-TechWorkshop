@@ -5,7 +5,7 @@ const apiKey = "your_api_key";
 const apiVersion = "your_api_version";
 const deployment = "your_deployment";
 
-async function queryGPT(contract, question) {
+async function queryModel(contract, question) {
 
   const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment, dangerouslyAllowBrowser: true });
 
@@ -36,4 +36,4 @@ async function queryGPT(contract, question) {
   return result.choices[0].message.content;
 }
 
-export default queryGPT;
+export default queryModel;

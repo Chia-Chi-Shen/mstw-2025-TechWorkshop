@@ -1,6 +1,9 @@
 import { useState, useRef } from 'react';
+
+// These are the libraries you need to use the services.
 import { DocumentAnalysisClient, AzureKeyCredential } from "@azure/ai-form-recognizer";
 import { AzureOpenAI } from 'openai';
+
 import './App.css';
 
 const pdfList = [
@@ -9,7 +12,11 @@ const pdfList = [
   { title: 'demo3.pdf', url: 'https://workshoppoc.blob.core.windows.net/pdf/demo3.pdf' },
 ];
 
-const endpoint = "your_endpoint";
+/** Replace the following values with your own.
+ *  Remember to pass the right variables to each function!
+*/
+const endpoint_doc = "your_endpoint_for_doc";
+const endpoint_openai = "your_endpoint_for_openai";
 const apiVersion = "your_api_version";
 const deployment = "your_deployment";
 
@@ -58,7 +65,7 @@ function App() {
       const data = await analyzePDFWithUrl(blobUrl)
       const content = data.content;
       // Then, query the GPT model and get the response.
-      const result = await queryGPT(content, question);
+      const result = await queryModel(content, question);
       // Update states of the chatroom.
       setIsLoading(false);
       setMessages((messages) => [...messages, { text: result, side: 'left' }]);
@@ -69,14 +76,14 @@ function App() {
     }
   }
 
-  // Implement the analyzePDF function here
+  // Function for calling the Document Intelligence service.
   async function analyzePDFWithUrl(blobUrl) {
-
+    // write your code here
   }
 
-  // Implement the queryGPT function here
-  async function queryGPT(contract, question) {
-
+  // Function for calling the OpenAI service.
+  async function queryModel(contract, question) {
+    // write your code here
   }
 
   const handleApiKey = () => {
