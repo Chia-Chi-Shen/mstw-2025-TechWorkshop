@@ -22,13 +22,13 @@ const deployment = "your_deployment";
 
 function App() {
   const [messages, setMessages] = useState('');
-  const [apiKey, setApiKey] = useState(localStorage.getItem('ApiKey') || '');
+  const [openAiKey, setOpenAiKey] = useState(localStorage.getItem('OpenAiKey') || '');
   const [docKey, setDocKey] = useState(localStorage.getItem('DocKey') || '');
   const [isLoading, setIsLoading] = useState(false);
   const messageEndRef = useRef(null);
 
   const sendQuestion = async () => {
-    if (!apiKey) {
+    if (!openAiKey) {
       window.alert('Please enter the API Key');
       return;
     }
@@ -86,11 +86,11 @@ function App() {
     // write your code here
   }
 
-  const handleApiKey = () => {
+  const handleOpenAiKey = () => {
     const target = document.querySelector('.api-key')
-    const ApiKey = target.value;
-    localStorage.setItem('ApiKey', ApiKey);
-    setApiKey(ApiKey);
+    const OpenAiKey = target.value;
+    localStorage.setItem('OpenAiKey', OpenAiKey);
+    setOpenAiKey(OpenAiKey);
     window.alert('API Key saved successfully');
   }
 
@@ -116,7 +116,7 @@ function App() {
           <div className="key-row">
             <span className="key-label">API Key:</span>
             <input className="key-input api-key" type="password" />
-            <button className="key-button" onClick={handleApiKey}>Save</button>
+            <button className="key-button" onClick={handleOpenAiKey}>Save</button>
           </div>
         </div>
         <ul className="pdf-list">
