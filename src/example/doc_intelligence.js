@@ -1,10 +1,10 @@
 import { DocumentAnalysisClient, AzureKeyCredential } from "@azure/ai-form-recognizer";
 
-const endpoint = "your_endpoint";
-const apiKey = "your_api_key";
+const endpoint_doc = "your_endpoint";
+const docKey = "your_api_key";
 
 async function analyzePDFWithUrl() {
-    const client = new DocumentAnalysisClient(endpoint, new AzureKeyCredential(apiKey));
+    const client = new DocumentAnalysisClient(endpoint_doc, new AzureKeyCredential(docKey));
 
     const blobUrl = "https://workshoppoc.blob.core.windows.net/pdf/test.pdf";
 

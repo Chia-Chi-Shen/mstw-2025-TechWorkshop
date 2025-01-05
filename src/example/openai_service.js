@@ -1,13 +1,18 @@
 import { AzureOpenAI } from 'openai';
 
-const endpoint = "your_endpoint";
-const apiKey = "your_api_key";
+const endpoint_openai = "your_endpoint";
+const openAiKey = "your_api_key";
 const apiVersion = "your_api_version";
 const deployment = "your_deployment";
 
 async function queryModel(contract, question) {
 
-  const client = new AzureOpenAI({ endpoint, apiKey, apiVersion, deployment, dangerouslyAllowBrowser: true });
+  const client = new AzureOpenAI({ 
+    endpoint: endpoint_openai, 
+    apiKey: openAiKey, 
+    apiVersion, 
+    deployment, 
+    dangerouslyAllowBrowser: true });
 
   const system_prompt = `You are a contract analyst assistant. Your task is to help users understand the content of a provided contract. You will: \n \
                             1. Only respond based on the contract's content. \n \
