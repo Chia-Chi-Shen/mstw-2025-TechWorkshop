@@ -46,11 +46,11 @@ h1 {
 
 .key-label {
   color: grey;
-  width: 90px;
+  width: 110px;
 }
 
 .key-input {
-  width: 100px;
+  width: 90px;
   padding: 3px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -138,6 +138,11 @@ h1 {
   resize: none;
   padding: 10px;
   font: inherit;
+}
+
+.chat-box textarea:focus {
+  outline: none;
+  border-color: #30a2cc;
 }
 
 .chat-box button {

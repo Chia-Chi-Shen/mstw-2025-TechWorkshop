@@ -29,7 +29,7 @@ function App() {
 
   const sendQuestion = async () => {
     if (!openAiKey) {
-      window.alert('Please enter the API Key');
+      window.alert('Please enter the OpenAI Key');
       return;
     }
     if (!docKey) {
@@ -87,11 +87,11 @@ function App() {
   }
 
   const handleOpenAiKey = () => {
-    const target = document.querySelector('.api-key')
+    const target = document.querySelector('.openai-key')
     const OpenAiKey = target.value;
     localStorage.setItem('OpenAiKey', OpenAiKey);
     setOpenAiKey(OpenAiKey);
-    window.alert('API Key saved successfully');
+    window.alert('OpenAI Key saved successfully');
   }
 
   const handleDocKey = () => {
@@ -109,13 +109,13 @@ function App() {
         <h1>PDF Viewer</h1>
         <div className="key-container">
           <div className="key-row">
-            <span className="key-label">DOC Key:</span>
+            <span className="key-label">Doc Key:</span>
             <input className="key-input doc-key" type="password" />
             <button className="key-button" onClick={handleDocKey}>Save</button>
           </div>
           <div className="key-row">
-            <span className="key-label">API Key:</span>
-            <input className="key-input api-key" type="password" />
+            <span className="key-label">OpenAI Key:</span>
+            <input className="key-input openai-key" type="password" />
             <button className="key-button" onClick={handleOpenAiKey}>Save</button>
           </div>
         </div>
