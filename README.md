@@ -7,7 +7,7 @@
 點擊 [這裡](https://nodejs.org/en/download/) 下載安裝程式
 
 ## 安裝步驟
-1. Fork 本專案到自己的 GitHub 帳號
+1. Clone 本專案至本地端
 ```
 git clone https://github.com/Chia-Chi-Shen/mstw-2025-TechWorkshop.git
 ```

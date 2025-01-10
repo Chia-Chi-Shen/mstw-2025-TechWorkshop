@@ -78,12 +78,12 @@ function App() {
 
   // Function for calling the Document Intelligence service.
   async function analyzePDFWithUrl(blobUrl) {
-    // write your code here
+    // Implement by your self! (you can refer the sample code in "example" directory)
   }
 
   // Function for calling the OpenAI service.
   async function queryModel(contract, question) {
-    // write your code here
+    // Implement by your self! (you can refer the sample code in "example" directory)
   }
 
   const handleOpenAiKey = () => {

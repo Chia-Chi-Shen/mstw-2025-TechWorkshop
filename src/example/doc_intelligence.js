@@ -4,21 +4,28 @@ const endpoint_doc = "your_endpoint";
 const docKey = "your_api_key";
 
 async function analyzePDFWithUrl() {
-    const client = new DocumentAnalysisClient(endpoint_doc, new AzureKeyCredential(docKey));
 
-    const blobUrl = "https://workshoppoc.blob.core.windows.net/pdf/test.pdf";
+  // Construct an DocumentAnalysisClient instance with necessary information
+  // It can used for query the resource created in Document Intelligence
+  const client = new DocumentAnalysisClient(endpoint_doc, new AzureKeyCredential(docKey));
 
-    console.log("Starting analysis from Blob Storage URL...");
-    const poller = await client.beginAnalyzeDocumentFromUrl("prebuilt-document", blobUrl);
+  // Sample pdf url
+  const blobUrl = "https://workshoppoc.blob.core.windows.net/pdf/demo1.pdf";
 
-    const result = await poller.pollUntilDone();
+  console.log("Starting analysis from Blob Storage URL...");
 
-    if (!result) {
-        console.log("Failed to analyze the PDF file. :(");
-        throw new Error("Failed to analyze the PDF file. :(");
-    }
+  // Start document analyze process
+  const poller = await client.beginAnalyzeDocumentFromUrl("prebuilt-document", blobUrl);
 
-    return result;
+  // Polling job process until it finish
+  const result = await poller.pollUntilDone();
+
+  if (!result) {
+    console.log("Failed to analyze the PDF file. :(");
+    throw new Error("Failed to analyze the PDF file. :(");
+  }
+
+  return result;
 }
 
 export default analyzePDFWithUrl;
