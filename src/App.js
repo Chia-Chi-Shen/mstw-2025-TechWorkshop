@@ -22,14 +22,14 @@ const deployment = "your_deployment";
 
 function App() {
   const [messages, setMessages] = useState('');
-  const [apiKey, setApiKey] = useState(localStorage.getItem('ApiKey') || '');
+  const [openAiKey, setOpenAiKey] = useState(localStorage.getItem('OpenAiKey') || '');
   const [docKey, setDocKey] = useState(localStorage.getItem('DocKey') || '');
   const [isLoading, setIsLoading] = useState(false);
   const messageEndRef = useRef(null);
 
   const sendQuestion = async () => {
-    if (!apiKey) {
-      window.alert('Please enter the API Key');
+    if (!openAiKey) {
+      window.alert('Please enter the OpenAI Key');
       return;
     }
     if (!docKey) {
@@ -78,20 +78,20 @@ function App() {
 
   // Function for calling the Document Intelligence service.
   async function analyzePDFWithUrl(blobUrl) {
-    // write your code here
+    // Implement by your self! (you can refer the sample code in "example" directory)
   }
 
   // Function for calling the OpenAI service.
   async function queryModel(contract, question) {
-    // write your code here
+    // Implement by your self! (you can refer the sample code in "example" directory)
   }
 
-  const handleApiKey = () => {
-    const target = document.querySelector('.api-key')
-    const ApiKey = target.value;
-    localStorage.setItem('ApiKey', ApiKey);
-    setApiKey(ApiKey);
-    window.alert('API Key saved successfully');
+  const handleOpenAiKey = () => {
+    const target = document.querySelector('.openai-key')
+    const OpenAiKey = target.value;
+    localStorage.setItem('OpenAiKey', OpenAiKey);
+    setOpenAiKey(OpenAiKey);
+    window.alert('OpenAI Key saved successfully');
   }
 
   const handleDocKey = () => {
@@ -109,14 +109,14 @@ function App() {
         <h1>PDF Viewer</h1>
         <div className="key-container">
           <div className="key-row">
-            <span className="key-label">DOC Key:</span>
+            <span className="key-label">Doc Key:</span>
             <input className="key-input doc-key" type="password" />
             <button className="key-button" onClick={handleDocKey}>Save</button>
           </div>
           <div className="key-row">
-            <span className="key-label">API Key:</span>
-            <input className="key-input api-key" type="password" />
-            <button className="key-button" onClick={handleApiKey}>Save</button>
+            <span className="key-label">OpenAI Key:</span>
+            <input className="key-input openai-key" type="password" />
+            <button className="key-button" onClick={handleOpenAiKey}>Save</button>
           </div>
         </div>
         <ul className="pdf-list">
