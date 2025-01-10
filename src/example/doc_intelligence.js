@@ -6,7 +6,7 @@ const docKey = "your_api_key";
 async function analyzePDFWithUrl(blobUrl) {
     // Construct an DocumentAnalysisClient instance with necessary information
     // It can used for query the resource created in Document Intelligence
-    const client = new DocumentAnalysisClient(endpoint, new AzureKeyCredential(apiKey));
+    const client = new DocumentAnalysisClient(endpoint_doc, new AzureKeyCredential(docKey));
     console.log("Starting analysis from Blob Storage URL...");
     // Start document analyze process
     const poller = await client.beginAnalyzeDocumentFromUrl("prebuilt-document", blobUrl);
