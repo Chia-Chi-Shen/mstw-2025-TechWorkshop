@@ -3,12 +3,10 @@ import { DocumentAnalysisClient, AzureKeyCredential } from "@azure/ai-form-recog
 const endpoint = "your_endpoint";
 const apiKey = "your_api_key";
 
-async function analyzePDFWithUrl() {
+async function analyzePDFWithUrl(blobUrl) {
     const client = new DocumentAnalysisClient(endpoint, new AzureKeyCredential(apiKey));
-
-    const blobUrl = "https://workshoppoc.blob.core.windows.net/pdf/test.pdf";
-
     console.log("Starting analysis from Blob Storage URL...");
+
     const poller = await client.beginAnalyzeDocumentFromUrl("prebuilt-document", blobUrl);
 
     const result = await poller.pollUntilDone();
